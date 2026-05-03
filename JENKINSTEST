@@ -1,0 +1,31 @@
+node {
+    def maven_Home = tool name: 'Maven-3.9.15INSTALL'
+    stage('Clean Workspace') 
+    {
+        cleanWs()
+    }
+    stage('checkout')
+    {
+        git changelog: false, credentialsId: 'f0bcac89-77e3-4ce7-8721-24e09e87487e', poll: false, url: 'https://github.com/lakshmi7121/maven-web-application.git'
+    }
+    stage('build')
+    {
+        sh "${maven_Home}/bin/mvn clean package"
+    }
+    stage('sonarqubereport')
+    {
+        sh "${maven_Home}/bin/mvn sonar:sonar"
+    }
+    stage('DevApproval') 
+    {
+        input message: "Approve Dev changes?", ok: "Approve"
+    }
+    stage('Deploy to Dev')
+    {
+        deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'f489cf86-2a1a-4cfe-98d3-f589f324aef4', path: '', url: 'http://18.189.186.49:8080/')], contextPath: null, onFailure: false, war: 'target/*.war'
+    }
+    stage('slacknotifyDEV')
+    {
+        slackSend channel: '#build-notifications', message: 'DEV DEPLOYMENT SUCCESSFUL'
+    }
+}
