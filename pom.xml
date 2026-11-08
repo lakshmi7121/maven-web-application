@@ -91,8 +91,8 @@
 		</repository>
 		<snapshotRepository>
 			<id>nexus</id>
-			<name>Mithun Technologies Snapshot Nexus Repository </name>
-			<url>http://172.31.42.154:9980/mithuntechnologies/repository/canarabank-release/</url>
+			<name>maven-lakshmi</name>
+			<url>http://3.236.177.210:8081/repository/maven-lakshmi/</url>
 		</snapshotRepository>
 	</distributionManagement>
 	
